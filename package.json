@@ -1,7 +1,7 @@
 {
   "name": "skillpm",
   "version": "0.1.0",
-  "description": "Agent Skill package manager — thin orchestration layer on top of npm",
+  "description": "The package manager for Agent Skills",
   "type": "module",
   "bin": {
     "skillpm": "./dist/cli.js"

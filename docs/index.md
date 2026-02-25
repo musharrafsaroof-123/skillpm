@@ -1,8 +1,8 @@
 # skillpm
 
-**Agent Skill package manager — thin orchestration layer on top of npm.**
+**The package manager for Agent Skills.**
 
-skillpm manages [Agent Skill](https://agentskills.io) dependency trees with full transitive resolution and wires installed skills into agent directories, configuring any required MCP servers along the way.
+Install skills with a single command — skillpm resolves the full dependency tree, wires everything into your agent directories (Claude, Cursor, VS Code, Codex, and more), and configures any required MCP servers.
 
 <div class="grid cards" markdown>
 

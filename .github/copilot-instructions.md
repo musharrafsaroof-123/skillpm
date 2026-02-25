@@ -2,7 +2,7 @@
 
 ## What is skillpm?
 
-skillpm is a **thin orchestration layer on top of npm** that adds skill-awareness. It manages Agent Skill dependency trees with full transitive resolution and wires installed skills into agent directories, configuring any required MCP servers along the way.
+skillpm is **the package manager for Agent Skills**. It builds on top of npm to add skill-awareness — resolving dependency trees, wiring skills into agent directories, and configuring MCP servers.
 
 **Design principle: stay as close to npm as possible.** skillpm should feel like npm. Same `package.json`, same `node_modules/`, same `package-lock.json`, same registry. skillpm only adds what npm can't do: scanning for skills, wiring them into agent directories, and configuring MCP servers.
 
