@@ -2,6 +2,7 @@
 
 [![npm](https://img.shields.io/npm/v/skillpm)](https://www.npmjs.com/package/skillpm)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+[![Docs](https://img.shields.io/badge/docs-skillpm.dev-blue)](https://skillpm.dev)
 
 **skillpm** is a thin orchestration layer on top of npm that adds [Agent Skill](https://agentskills.io) awareness. It manages skill dependency trees with full transitive resolution and wires installed skills into agent directories, configuring any required MCP servers along the way.
 
