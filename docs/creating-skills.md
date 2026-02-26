@@ -21,10 +21,16 @@ my-skill/
 │       ├── scripts/             # optional executable scripts
 │       ├── references/          # optional reference docs
 │       └── assets/              # optional templates/data
-├── agents/                      # optional custom agent definitions
-│   └── reviewer.md
-└── prompts/                     # optional prompt/instruction files
-    └── conventions.md
+└── configs/                      # optional — mirrors workspace layout
+    ├── .claude/
+    │   ├── agents/reviewer.md
+    │   └── rules/conventions.md
+    ├── .cursor/
+    │   ├── agents/reviewer.md
+    │   └── rules/conventions.md
+    └── .github/
+        ├── agents/reviewer.md
+        └── instructions/conventions.instructions.md
 ```
 
 One skill per npm package. The skill directory name must match the `name` field in SKILL.md frontmatter.
@@ -84,61 +90,70 @@ Instead of duplicating instructions, depend on other skills. A fullstack React s
 
 Each skill stays small and focused. `skillpm install fullstack-react` resolves the entire tree in one step. npm handles resolution, lockfile, audit, and caching — just like any npm package.
 
-## Bundling agents
+## Bundling agent configs, rules, and prompts
 
-Skill packages can include custom agent definitions in an `agents/` directory. When installed, skillpm wires them into supported agent systems via [`add-agent`](https://github.com/sbroenne/add-agent).
+A `SKILL.md` teaches agents *what to do* — it contains instructions that agents read at runtime. But some agent systems also use **config files** in specific directories: subagent definitions in `.claude/agents/`, rules in `.cursor/rules/`, instructions in `.github/instructions/`, etc.
 
-```
-my-skill/
-├── package.json
-├── skills/
-│   └── my-skill/
-│       └── SKILL.md
-└── agents/
-    └── code-reviewer.md         # agent definition
-```
-
-Agent files use YAML frontmatter (compatible with Claude Code and Cursor):
-
-```yaml
----
-name: code-reviewer
-description: Reviews code for quality and security.
----
-
-# Code Reviewer
-
-## When to activate
-Trigger when the user asks for code review...
-```
-
-`skillpm install` detects `agents/*.md` and runs `npx add-agent` to copy them into `.claude/agents/` and `.cursor/agents/`. `skillpm uninstall` cleans them up automatically.
-
-## Bundling prompts
-
-Skill packages can include prompt/instruction files in a `prompts/` directory. When installed, skillpm wires them into supported agent systems via [`add-prompt`](https://github.com/sbroenne/add-prompt).
+The `configs/` directory lets you bundle these config files with your skill. It mirrors the workspace layout — whatever directory structure you put inside `configs/` gets copied to the workspace root on install.
 
 ```
 my-skill/
 ├── package.json
 ├── skills/
 │   └── my-skill/
-│       └── SKILL.md
-└── prompts/
-    └── conventions.md           # prompt/instruction file
+│       └── SKILL.md             # Instructions agents read at runtime
+└── configs/                      # Config files copied to workspace on install
+    ├── .claude/
+    │   ├── agents/reviewer.md       # Claude subagent
+    │   └── rules/conventions.md     # Claude rules
+    ├── .cursor/
+    │   ├── agents/reviewer.md       # Cursor agent
+    │   └── rules/conventions.md     # Cursor rules
+    └── .github/
+        ├── agents/reviewer.md       # Copilot agent
+        └── instructions/conventions.instructions.md
 ```
 
-Prompt files are distributed to agents using two strategies:
+!!! tip
+    Not every skill needs `configs/`. If your skill is just instructions (SKILL.md), you don't need it. Use `configs/` when you want to ship subagent definitions, rules, or instructions in the native format of each agent system.
 
-| Agent System | Method |
-|-------------|--------|
-| GitHub Copilot (`.github/instructions/`) | File copy |
-| Cursor (`.cursor/rules/`) | File copy |
-| Claude Code (`CLAUDE.md`) | Section markers |
-| Codex (`AGENTS.md`) | Section markers |
-| Gemini CLI (`GEMINI.md`) | Section markers |
+### How it works
 
-For single-file targets like `CLAUDE.md`, prompts are injected using HTML comment markers that allow clean updates and removal without disturbing existing content.
+On `skillpm install`, files from `configs/` are copied to the workspace root with an auto-prefix to prevent conflicts between skills:
+
+| Source | Destination |
+|--------|-------------|
+| `configs/.claude/agents/reviewer.md` | `.claude/agents/my-skill--reviewer.md` |
+| `configs/.cursor/rules/conventions.md` | `.cursor/rules/my-skill--conventions.md` |
+| `configs/.github/instructions/help.instructions.md` | `.github/instructions/my-skill--help.instructions.md` |
+
+On `skillpm uninstall`, all copied files are removed automatically using the manifest at `.skillpm/manifest.json`.
+
+### Supported targets
+
+Only include targets your skill supports — you don't need to support every agent system.
+
+| Directory | Agent System |
+|-----------|-------------|
+| `.claude/agents/` | Claude Code subagents |
+| `.claude/rules/` | Claude Code rules |
+| `.cursor/agents/` | Cursor agents |
+| `.cursor/rules/` | Cursor rules |
+| `.github/agents/` | GitHub Copilot agents |
+| `.github/instructions/` | GitHub Copilot instructions |
+
+### Including dotfiles in npm packages
+
+Since `configs/` contains directories starting with `.`, you must list them in your `package.json` `files` field:
+
+```json
+{
+  "files": [
+    "skills/",
+    "configs/"
+  ]
+}
+```
 
 ## Declaring MCP servers
 

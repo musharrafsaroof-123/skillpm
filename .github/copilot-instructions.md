@@ -34,12 +34,22 @@ my-skill/                        # npm package root
 ├── package.json                 # npm metadata, deps, skillpm.mcpServers, keywords: ["agent-skill"]
 ├── README.md                    # for humans on npmjs.org
 ├── LICENSE
-└── skills/
-    └── my-skill/                # spec-compliant skill directory
-        ├── SKILL.md             # The skill definition (YAML frontmatter + Markdown body)
-        ├── scripts/             # Optional: executable code the skill references
-        ├── references/          # Optional: additional docs/resources
-        └── assets/              # Optional: templates, images, data files
+├── skills/
+│   └── my-skill/                # spec-compliant skill directory
+│       ├── SKILL.md             # The skill definition (YAML frontmatter + Markdown body)
+│       ├── scripts/             # Optional: executable code the skill references
+│       ├── references/          # Optional: additional docs/resources
+│       └── assets/              # Optional: templates, images, data files
+└── configs/                      # Optional: mirrors workspace layout for agent/rule/prompt files
+    ├── .claude/
+    │   ├── agents/reviewer.md
+    │   └── rules/conventions.md
+    ├── .cursor/
+    │   ├── agents/reviewer.md
+    │   └── rules/conventions.md
+    └── .github/
+        ├── agents/reviewer.md
+        └── instructions/conventions.instructions.md
 ```
 
 One skill per npm package. The skill directory name must match the `name` field in SKILL.md frontmatter. All skill packages must include `"agent-skill"` in `package.json` `keywords` for discoverability on npmjs.org. Use `git+https://` prefix for `repository.url` in `package.json` (npm requires this format).
@@ -94,6 +104,20 @@ allowed-tools: Bash Read      # optional, space-delimited tool whitelist
 
 Version comes from `package.json` — do not duplicate it in SKILL.md metadata.
 
+### Agent system terminology
+
+Each agent system uses different names for the same concepts. skillpm abstracts over all of them:
+
+| Agent system | "Agents" term | Agent directory | "Prompts/Rules" term | Prompt directory |
+|---|---|---|---|---|
+| **Claude Code** | Subagents | `.claude/agents/*.md` | Rules / CLAUDE.md | `.claude/rules/*.md` |
+| **Cursor** | Custom agents | `.cursor/agents/*.md` | Rules | `.cursor/rules/*.md` |
+| **GitHub Copilot** | Custom agents | `.github/agents/*.md` | Instructions | `.github/instructions/*.md` |
+| **Codex** | Agents | `AGENTS.md` (sections) | — | `AGENTS.md` (sections) |
+| **Gemini** | — | `GEMINI.md` (sections) | — | `GEMINI.md` (sections) |
+
+Skills are always per-workspace (backed by `package.json` and lockfile). Global skill installs (`-g`) are not supported — use `npx skills add <path>` for global skills.
+
 ## How skillpm works
 
 ### Install flow
@@ -105,7 +129,8 @@ When a user runs `skillpm install refactor-react`:
 3. For each skill found, skillpm calls `npx skills add ./node_modules/<package>/skills/<name>/` to link it into agent directories
 4. skillpm reads the `skillpm` field from each installed skill's `package.json` (transitive walk):
    - `skillpm.mcpServers[]` → shells out to `npx add-mcp <source>` for each
-5. Done — agents see the full skill tree with MCP servers configured
+5. For each skill with a `configs/` directory, skillpm copies files to the workspace root with package-name prefixed filenames (tracked in `.skillpm/manifest.json`)
+6. Done — agents see the full skill tree with MCP servers configured
 
 ### Core CLI commands
 
@@ -138,7 +163,7 @@ skillpm/
 │   │   ├── sync.ts           # Re-run scan/link/MCP config without reinstalling
 │   │   └── mcp.ts            # Passthrough to add-mcp
 │   ├── scanner/              # Scan node_modules/ for packages containing skills/*/SKILL.md
-│   ├── postinstall/          # Walk tree, collect skillpm.mcpServers fields, delegate to add-mcp
+│   ├── configs/               # Copy configs/ files to workspace, manifest tracking
 │   ├── manifest/             # package.json `skillpm` field parsing + SKILL.md parsing
 │   ├── config/               # Config loading (supported agents, preferences)
 │   └── utils/                # Shared helpers (logging, errors, child_process wrappers)
@@ -173,7 +198,7 @@ npm run lint          # lint
 - Use **ESLint** and **Prettier** for linting and formatting.
 - One file per CLI command under `src/commands/`.
 - Delegate to npm for all package management — do not reimplement registry, resolution, or caching.
-- skillpm's only custom code is: scanning `node_modules/` for `skills/*/SKILL.md`, reading `skillpm.mcpServers` fields, and orchestrating the tools above.
+- skillpm's only custom code is: scanning `node_modules/` for `skills/*/SKILL.md`, reading `skillpm.mcpServers` fields, copying `configs/` files into the workspace, and orchestrating the tools above.
 - Shell out to `skills` CLI (for agent-directory linking), `add-mcp` CLI (for MCP config), and `skills-ref` CLI (for spec validation).
 - Use **zod** for validating the `skillpm` field schema in `package.json`.
 - Use **gray-matter** for parsing YAML frontmatter from SKILL.md files.
