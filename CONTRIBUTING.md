@@ -38,6 +38,9 @@ src/
 ├── scanner/                # Scans node_modules/ for skills
 │   ├── index.ts
 │   └── index.test.ts
+├── configs/                # Copy configs/ files to workspace, manifest tracking
+│   ├── index.ts
+│   └── index.test.ts
 ├── manifest/               # package.json + SKILL.md parsing
 │   ├── schema.ts
 │   ├── index.ts
@@ -63,7 +66,7 @@ The `main` branch is protected:
 
 - **All changes go through pull requests** — no direct pushes to `main`
 - **Squash merge only** — every PR becomes a single clean commit on `main`
-- **CI must pass** — build and tests on Node 18, 20, and 22 are required before merging
+- **CI must pass** — build and tests on Node 18, 20, 22, and 24 are required before merging
 - **Branches are auto-deleted** after merge
 
 ### Making changes
